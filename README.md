@@ -1,6 +1,6 @@
 # AnalyseGutenberg
 
-### About
+### About and Usage
 This repository might be of use to you if you're a humanities researcher. This repository does the following:
 It allows you to download the works of various authors from Project Gutenberg and stores them into individual directories. Sub-directories for the language of the text are created. This downloading is done using the Python Gutenberg package (https://github.com/c-w/Gutenberg). After this, it performs some basic text clustering on their works. Currently, you can download the works of multiple authors at a time but analyse only two at a time. Also, the analysis just now is only for English texts. I will change this soon. 
 
@@ -12,10 +12,12 @@ I've added a short shell script called execute that runs the Download.py and Ana
 
 The two folders author1 and author2 are how your texts would get downloaded and stored. Delete them before you run the script. 
 
+If you're using the Gutenberg package for the first time, run the inital.py script before you start working. This will take a while. Took about an hour on my computer. For more details on the Gutenberg package you can refer to https://github.com/c-w/Gutenberg .
+
 ###  Requirements
-To use the package you would require the following:
+To use the scripts you would require the following:
 1. Python3
-2. Python Gutenberg
+2. Gutenberg (python package: https://pypi.python.org/pypi/Gutenberg)
 3. Gensim
 4. NLTK
 5. Numpy
