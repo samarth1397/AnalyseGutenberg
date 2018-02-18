@@ -27,4 +27,7 @@ To use the scripts you would require the following:
 6. Matplotlib
 7. Pandas
 8. Scikit learn 
+9. Sentic Net
 
+This project uses Sentic Net in some of the Stylometric features. For more information on Sentic Net, please refer to: 
+E. Cambria, S. Poria, R. Bajpai, and B. Schuller. SenticNet 4: A semantic resource for sentiment analysis based on conceptual primitives. In: COLING, pp. 2666-2677, Osaka (2016)
