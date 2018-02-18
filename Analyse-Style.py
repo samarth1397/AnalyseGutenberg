@@ -19,7 +19,7 @@ from nltk.tokenize import sent_tokenize
 import string
 import numpy as np
 from sklearn.preprocessing import normalize
-
+from senticnet.senticnet import Senticnet
 
 #########################################
 # FEW USEFUL FUNCTIONS
@@ -114,6 +114,13 @@ def average_but_per_sent(para):
         total=total+s.count("but")
     return(total/float(len(sents)))
 
+def average_excl_per_sent(para):
+    sents=sent_tokenize(para)
+    total=0
+    for s in sents:
+        total=total+s.count("!")
+    return(total/float(len(sents)))    
+
 def average_very_per_sent(para):
     sents=sent_tokenize(para)
     total=0
@@ -180,6 +187,35 @@ def yules_para(para):
     i = (m1*m1) / (m2-m1)
     k = 1/i * 10000
     return (k, i)    
+
+# positive and negative emotion score
+sn = Senticnet()
+def positiveScore(para):
+    posScore=0
+    words=nltk.tokenize.RegexpTokenizer(r'\w+').tokenize(para)
+    for i in words:
+        try: 
+            polarity_intense = float(sn.polarity_intense(i))
+            if(polarity_intense>0):
+                posScore=posScore+polarity_intense
+        except KeyError: 
+            continue
+    
+    return(posScore/len(words))
+
+def negativeScore(para):
+    negScore=0
+    words=nltk.tokenize.RegexpTokenizer(r'\w+').tokenize(para)
+    for i in words:
+        try: 
+            polarity_intense = float(sn.polarity_intense(i))
+            if(polarity_intense<0):
+                negScore=negScore+polarity_intense
+        except KeyError: 
+            continue
+    
+    return(abs(negScore)/len(words))
+
 
 ###########################################
 
@@ -254,7 +290,7 @@ while(i<len(books)):
 
 pos_tags_list=['CC','CD','DT','EX','FW','IN','JJ','JJR','JJS','LS','MD','NN','NNS','NNP','NNPS','PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
 
-numOfFeatures= 13+ len(pos_tags_list) + len(stopwords.words('english'))
+numOfFeatures= 16+ len(pos_tags_list) + len(stopwords.words('english'))
 
 features=np.zeros((len(books),numOfFeatures))
 
@@ -274,6 +310,9 @@ for i in range(len(books)):
     features[i,10]=average_more_per_sent(books[i])
     features[i,11]=type_token_ratio(books[i])
     features[i,12]=yules_para(books[i])[0]
+    features[i,13]=positiveScore(books[i])
+    features[i,14]=negativeScore(books[i])
+    features[i,15]=average_excl_per_sent(books[i])
     
     #PoS Tags
     posScore=list()
