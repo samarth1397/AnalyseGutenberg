@@ -20,6 +20,9 @@ import string
 import numpy as np
 from sklearn.preprocessing import normalize
 from senticnet.senticnet import Senticnet
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.metrics import accuracy_score
 
 #########################################
 # FEW USEFUL FUNCTIONS
@@ -323,7 +326,7 @@ for i in range(len(books)):
         else:
             posScore.append(0)
     for j in range(36):
-        features[i,13+j]=posScore[j]
+        features[i,15+j]=posScore[j]
 
     #function words
     functionScore=list()
@@ -335,23 +338,25 @@ for i in range(len(books)):
             functionScore.append(0)
             
     for j in range(len(stopwords.words('english'))):
-        features[i,13+36+j]=functionScore[j]
+        features[i,15+36+j]=functionScore[j]
 
 
 features=normalize(features, axis=0, norm='max')
 
-print("Feature generation complete........... Preparing for plotting........\n\n")
+print("Feature generation complete........... Preparing for clustering........\n\n")
 #preparing for plotting
 
 author=[" "]*len(books)
 num_author1=0
 num_author2=0
+labels=[0]*len(books)
 for i in range(len(ids)):
     if (ids[i][0:2]=="A1"):
         author[i]="Author1"
         num_author1=num_author1+1
     else:
         author[i]="Author2"
+        labels[i]=1
         num_author2=num_author2+1
 
 
@@ -422,16 +427,27 @@ for i in range(len(df)):
 plt.show()
 
 
+print("Using supervised machine learning to test stylometric similarity. \n")
 
+#preparing data to pass to classifier
+f=pd.DataFrame(features)
+l=pd.DataFrame(labels)
+data=pd.concat([f, l], axis=1)
 
+styloX=data.iloc[:,:-1]
+styloY=data.iloc[:,-1]
+X_train,X_test,y_train,y_test = train_test_split(styloX,styloY,test_size = 0.30,random_state=42)
 
+clf = svm.SVC()
 
+print("Training classifier: Support Vector Machine \n")
+clf.fit(X_train,y_train)
 
+y_predicted=clf.predict(X_test)
 
+score=accuracy_score(y_test,y_predicted)
 
-
-
-
+print("Accuracy on test set:", score)
 
 
 
