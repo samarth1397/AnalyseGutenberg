@@ -1,8 +1,12 @@
 # AnalyseGutenberg
 
-### About and Usage
-This repository might be of use to you if you're a humanities researcher. This repository does the following:
+### About
+This repository might be of use to you if you're a humanities researcher or looking for booking recommendations on Project Gutenberg. This repository does the following:
 It allows you to download the works of various authors from Project Gutenberg and stores them into individual directories. Sub-directories for the language of the text are created. This downloading is done using the Python Gutenberg package (https://github.com/c-w/Gutenberg). After this, it performs some basic text clustering on their works based on content as well as style. Currently, you can download the works of multiple authors at a time but analyse only two at a time. Also, the analysis just now is only for English texts. I will change this soon. 
+
+It also allows you to get the recommendations for a book. 
+
+### Usage
 
 **Download.py** will help you download all the works of multiple authors and store them into relevant folders. 
 
@@ -16,6 +20,8 @@ I've added a short shell script called execute that runs Download.py, Analyse-Co
 The two folders author1 and author2 are how your texts would get downloaded and stored. Delete them before you run the script. 
 
 If you're using the Gutenberg package for the first time, run the inital.py script before you start working. This will take a while. Took about an hour on my computer. For more details on the Gutenberg package you can refer to https://github.com/c-w/Gutenberg .
+
+**recommender.py** will load an existing distance matrix from your computer or calculate a new one if you're using the script for the first time. It will then suggest 7 books which are similar in "content". Before running recommender.py for the first time, you will have to run **downloadBooks.py**. This script downloads all the books from Project Gutenberg and stores them in a folder called "books" in your machine. Currently, the script downloads 56740 books. 
 
 ###  Requirements
 To use the scripts you would require the following:
